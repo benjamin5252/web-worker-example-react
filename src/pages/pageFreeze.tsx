@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input"
 import { heavyCalculation } from "@/lib/utils";
+import sonic from "@/assets/sonic.gif";
 
 export default function PageFreeze() {
     const [input, setInput] = useState<number>(2_000_000_000);
@@ -63,7 +64,7 @@ export default function PageFreeze() {
                 </div>
                 <div className="flex flex-col items-center justify-center gap-2">
                     <p className="text-black">GIF</p>
-                    <img className="w-[100px] h-[100px]" src="/sonic.gif" />
+                    <img className="w-[100px] h-[100px]" src={sonic} />
                 </div>
                 <div className="flex flex-col items-center justify-center gap-2">
                     <p className="text-black">Scroll</p>
