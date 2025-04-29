@@ -6,8 +6,8 @@ import { CompressWorkerController } from "@/workerController/CompressWorkerContr
 import { useState } from "react";
 
 export default function CompressImage() {
-    const [imageCount, setImageCount] = useState<number>(10);
-    const [workerCount, setWorkerCount] = useState<number>(1);
+    const [imageCount, setImageCount] = useState<number>(20);
+    const [workerCount, setWorkerCount] = useState<number>(4);
     const [mainThreadProgress, setMainThreadProgress] = useState<number>(0);
     const [workerThreadProgress, setWorkerThreadProgress] = useState<number>(0);
 
