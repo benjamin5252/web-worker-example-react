@@ -66,7 +66,7 @@ export default function CompressImage() {
         let finishedCountForMain = 0;
 
         const promise = Promise.all(arrayBuffersForWorker.map(async (arrayBuffer) => {
-            const result = await workerController.compress(arrayBuffer);
+            await workerController.compress(arrayBuffer);
             finishedCountForWorker++;
             const progress = Math.round(finishedCountForWorker / imageCount * 100);
             setWorkerThreadProgress(progress);
@@ -74,7 +74,7 @@ export default function CompressImage() {
 
         arrayBuffersForMain.reduce(async (promise, arrayBuffer) => {
             await promise;
-            const result = await compressFile(arrayBuffer);
+            await compressFile(arrayBuffer);
             finishedCountForMain++;
             const progress = Math.round(finishedCountForMain / imageCount * 100);
             setMainThreadProgress(progress);
