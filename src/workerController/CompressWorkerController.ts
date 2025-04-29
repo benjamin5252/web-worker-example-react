@@ -3,7 +3,7 @@ export class CompressWorkerController {
     id: number;
     workers: Worker[];
     constructor(number = 1) {
-        const workers = (new Array(number)).fill(new URL("../workers/compressWorker.ts", import.meta.url).href).map(url => new Worker(url, { type: 'module' }));
+        const workers = (new Array(number)).fill("").map(() => new Worker(new URL("../workers/compressWorker", import.meta.url), { type: 'module' }));
         this.id = 0;
         this.callBackMap = {};
         workers.forEach(worker => {
