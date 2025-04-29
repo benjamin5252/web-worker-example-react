@@ -7,7 +7,7 @@ import { heavyCalculation } from "@/lib/utils";
 import sonic from "@/assets/sonic.gif";
 
 export default function PageFreeze() {
-    const [input, setInput] = useState<number>(2_000_000_000);
+    const [input, setInput] = useState<number>(2);
     const [records, setRecords] = useState<string[]>([]);
     const [progress, setProgress] = useState<number>(0);
 
@@ -19,31 +19,43 @@ export default function PageFreeze() {
     }, []);
 
 
-    function heavyCalcMainThread() {
-        const n = input;
+    function heavyCalcMainThread(n: number) {
         const ans = heavyCalculation(n);
         return ans;
     }
 
-    function heavyCalcWorker(): Promise<number> {
+    function heavyCalcWorker(n: number): Promise<number> {
         return new Promise((resolve) => {
             const worker = new Worker(new URL("../workers/heavyCalcWorker.ts", import.meta.url), { type: "module" });
             worker.onmessage = function (e) {
                 resolve(e.data);
                 worker.terminate();
             };
-            worker.postMessage(input);
+            worker.postMessage(n);
         })
     }
 
     async function calc(type: "main" | "worker") {
         let sum = 0;
+        const n = input * 1000_000_000;
         if (type === "main") {
-            sum = heavyCalcMainThread();
+            sum = heavyCalcMainThread(n);
         } else {
-            sum = await heavyCalcWorker();
+            sum = await heavyCalcWorker(n);
         }
         setRecords([...records, `sum from 0 to ${input} is ${sum} (${type})`]);
+    }
+
+    function onInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+        const value = e.target.value;
+        if (value === "") {
+            setInput(0);
+        } else {
+            const num = parseInt(value, 10);
+            if (!isNaN(num)) {
+                setInput(num);
+            }
+        }
     }
 
     return (
@@ -52,6 +64,11 @@ export default function PageFreeze() {
                 <div className="flex flex-col items-center justify-center gap-2">
                     <p className="text-black">JS controled</p>
                     <Progress className="w-[100px]" value={progress} />
+                </div>
+                <div className="flex flex-col items-center justify-center gap-2">
+                    <p className="text-black">CSS animation</p>
+                    <div className="bg-black w-[100px] h-[100px] animate-pulse">
+                    </div>
                 </div>
                 <div className="flex flex-col items-center justify-center gap-2">
                     <p className="text-black">CSS animation</p>
@@ -75,9 +92,7 @@ export default function PageFreeze() {
             </div>
             <div className="flex flex-col items-center justify-center mt-4 gap-4">
                 <div>
-                    Sum from 0 to: <Input value={input} onChange={(e) => {
-                        setInput(parseInt(e.target.value));
-                    }} />
+                    Sum from 0 to: <Input value={input} onChange={onInputChange} /> * 10^9
                 </div>
                 <div className="flex flex-row items-center justify-center mt-4 gap-4">
                     <Button onClick={() => calc("main")} className="text-black">Calc on Main thread</Button>
