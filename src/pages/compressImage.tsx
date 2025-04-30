@@ -53,6 +53,30 @@ export default function CompressImage() {
         return files;
     }
 
+    const compressInMainThread = async (arrayBuffers: ArrayBuffer[]) => {
+        let finishedCountForMain = 0;
+        for (const arrayBuffer of arrayBuffers) {
+            await compressFile(arrayBuffer);
+            finishedCountForMain++;
+            setMainThreadProgress(
+                Math.round((finishedCountForMain / imageCount) * 100)
+            );
+        }
+    };
+
+    const compressInWorkerThread = async (arrayBuffers: ArrayBuffer[], workerController: CompressWorkerController) => {
+        let finishedCountForWorker = 0;
+        await Promise.all(
+            arrayBuffers.map(async (arrayBuffer) => {
+                await workerController.compress(arrayBuffer);
+                finishedCountForWorker++;
+                setWorkerThreadProgress(
+                    Math.round((finishedCountForWorker / imageCount) * 100)
+                );
+            })
+        );
+    };
+
     const test = async () => {
         const workerController = new CompressWorkerController(workerCount);
         setMainThreadProgress(0);
@@ -66,28 +90,10 @@ export default function CompressImage() {
                 getImageArrayBuffersFromFiles(imageFiles),
             ]);
 
-            let finishedCountForWorker = 0;
-            let finishedCountForMain = 0;
-
-            const workerPromise = Promise.all(
-                arrayBuffersForWorker.map(async (arrayBuffer) => {
-                    await workerController.compress(arrayBuffer);
-                    finishedCountForWorker++;
-                    setWorkerThreadProgress(
-                        Math.round((finishedCountForWorker / imageCount) * 100)
-                    );
-                })
-            );
-
-            for (const arrayBuffer of arrayBuffersForMain) {
-                await compressFile(arrayBuffer);
-                finishedCountForMain++;
-                setMainThreadProgress(
-                    Math.round((finishedCountForMain / imageCount) * 100)
-                );
-            }
-
-            await workerPromise;
+            await Promise.all([
+                compressInMainThread(arrayBuffersForMain),
+                compressInWorkerThread(arrayBuffersForWorker, workerController),
+            ]);
         } catch (error) {
             console.error("Error during compression:", error);
         } finally {
