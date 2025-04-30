@@ -10,6 +10,8 @@ export default function CompressImage() {
     const [workerCount, setWorkerCount] = useState<number>(4);
     const [mainThreadProgress, setMainThreadProgress] = useState<number>(0);
     const [workerThreadProgress, setWorkerThreadProgress] = useState<number>(0);
+    const [mainThreadTime, setMainThreadTime] = useState<number | null>(null);
+    const [workerThreadTime, setWorkerThreadTime] = useState<number | null>(null);
 
     const onImageCountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
@@ -54,6 +56,7 @@ export default function CompressImage() {
     }
 
     const compressInMainThread = async (arrayBuffers: ArrayBuffer[]) => {
+        const startTime = performance.now();
         let finishedCountForMain = 0;
         for (const arrayBuffer of arrayBuffers) {
             await compressFile(arrayBuffer);
@@ -62,9 +65,12 @@ export default function CompressImage() {
                 Math.round((finishedCountForMain / imageCount) * 100)
             );
         }
+        const endTime = performance.now();
+        setMainThreadTime(endTime - startTime);
     };
 
     const compressInWorkerThread = async (arrayBuffers: ArrayBuffer[], workerController: CompressWorkerController) => {
+        const startTime = performance.now();
         let finishedCountForWorker = 0;
         await Promise.all(
             arrayBuffers.map(async (arrayBuffer) => {
@@ -75,12 +81,16 @@ export default function CompressImage() {
                 );
             })
         );
+        const endTime = performance.now();
+        setWorkerThreadTime(endTime - startTime);
     };
 
     const test = async () => {
         const workerController = new CompressWorkerController(workerCount);
         setMainThreadProgress(0);
         setWorkerThreadProgress(0);
+        setMainThreadTime(null);
+        setWorkerThreadTime(null);
 
         try {
             const imageFiles = await getImageFiles(imageCount);
@@ -117,8 +127,11 @@ export default function CompressImage() {
             <div >
                 <h2 className="text-xl font-bold">Progress</h2>
                 <p className="text-gray-500">Main thread progress:</p>
+                <p className="text-gray-500">Time taken: {mainThreadTime !== null ? `${mainThreadTime.toFixed(2)} ms` : ""}</p>
                 <Progress className="w-[700px]" value={mainThreadProgress} />
+                <br />
                 <p className="text-gray-500">Worker thread progress:</p>
+                <p className="text-gray-500">Time taken: {workerThreadTime !== null ? `${workerThreadTime.toFixed(2)} ms` : ""}</p>
                 <Progress className="w-[700px]" value={workerThreadProgress} />
             </div>
         </div>
