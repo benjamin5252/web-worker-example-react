@@ -1,7 +1,7 @@
 //example to compress image
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
-import { compressFile, sleep } from "@/lib/utils";
+import { compressFile } from "@/lib/utils";
 import { CompressWorkerController } from "@/workerController/CompressWorkerController";
 import { useState } from "react";
 
