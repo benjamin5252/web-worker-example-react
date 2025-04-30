@@ -57,31 +57,43 @@ export default function CompressImage() {
         const workerController = new CompressWorkerController(workerCount);
         setMainThreadProgress(0);
         setWorkerThreadProgress(0);
-        
-        const imageFiles = await getImageFiles(imageCount);
 
-        const arrayBuffersForMain = await getImageArrayBuffersFromFiles(imageFiles);
-        const arrayBuffersForWorker = await getImageArrayBuffersFromFiles(imageFiles);
-        let finishedCountForWorker = 0;
-        let finishedCountForMain = 0;
+        try {
+            const imageFiles = await getImageFiles(imageCount);
 
-        const promise = Promise.all(arrayBuffersForWorker.map(async (arrayBuffer) => {
-            await workerController.compress(arrayBuffer);
-            finishedCountForWorker++;
-            const progress = Math.round(finishedCountForWorker / imageCount * 100);
-            setWorkerThreadProgress(progress);
-        }));
+            const [arrayBuffersForMain, arrayBuffersForWorker] = await Promise.all([
+                getImageArrayBuffersFromFiles(imageFiles),
+                getImageArrayBuffersFromFiles(imageFiles),
+            ]);
 
-        for (const arrayBuffer of arrayBuffersForMain) {
-            await compressFile(arrayBuffer);
-            finishedCountForMain++;
-            const progress = Math.round((finishedCountForMain / imageCount) * 100);
-            setMainThreadProgress(progress);
+            let finishedCountForWorker = 0;
+            let finishedCountForMain = 0;
+
+            const workerPromise = Promise.all(
+                arrayBuffersForWorker.map(async (arrayBuffer) => {
+                    await workerController.compress(arrayBuffer);
+                    finishedCountForWorker++;
+                    setWorkerThreadProgress(
+                        Math.round((finishedCountForWorker / imageCount) * 100)
+                    );
+                })
+            );
+
+            for (const arrayBuffer of arrayBuffersForMain) {
+                await compressFile(arrayBuffer);
+                finishedCountForMain++;
+                setMainThreadProgress(
+                    Math.round((finishedCountForMain / imageCount) * 100)
+                );
+            }
+
+            await workerPromise;
+        } catch (error) {
+            console.error("Error during compression:", error);
+        } finally {
+            workerController.destroy();
         }
-
-        await promise;
-        workerController.destroy();
-    }
+    };
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen gap-4">
