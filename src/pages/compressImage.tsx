@@ -72,14 +72,12 @@ export default function CompressImage() {
             setWorkerThreadProgress(progress);
         }));
 
-        arrayBuffersForMain.reduce(async (promise, arrayBuffer) => {
-            await promise;
+        for (const arrayBuffer of arrayBuffersForMain) {
             await compressFile(arrayBuffer);
             finishedCountForMain++;
-            const progress = Math.round(finishedCountForMain / imageCount * 100);
+            const progress = Math.round((finishedCountForMain / imageCount) * 100);
             setMainThreadProgress(progress);
-            return sleep(0);
-        }, sleep(0));
+        }
 
         await promise;
         workerController.destroy();
