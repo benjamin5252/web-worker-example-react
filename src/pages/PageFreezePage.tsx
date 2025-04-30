@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input"
 import { heavyCalculation } from "@/lib/utils";
 import sonic from "@/assets/sonic.gif";
 
-export default function PageFreeze() {
+export default function PageFreezePage() {
     const [input, setInput] = useState<number>(2);
     const [records, setRecords] = useState<string[]>([]);
     const [progress, setProgress] = useState<number>(0);

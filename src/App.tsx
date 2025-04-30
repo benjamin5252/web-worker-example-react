@@ -1,15 +1,15 @@
 import './App.css'
-import CompressImage from './pages/compressImage'
-import PageFreeze from './pages/pageFreeze'
+import CompressImagePage from './pages/CompressImagePage'
+import PageFreezePage from './pages/PageFreezePage'
 
 function App() {
   return (
     <>
       <div className="flex flex-col items-center justify-center min-h-svh">
-        <PageFreeze />
+        <PageFreezePage />
       </div>
       <div className="flex flex-col items-center justify-center min-h-svh">
-        <CompressImage/>
+        <CompressImagePage/>
       </div>
     </>
   )

@@ -5,7 +5,7 @@ import { compressFile, sleep } from "@/lib/utils";
 import { CompressWorkerController } from "@/workerController/CompressWorkerController";
 import { useState } from "react";
 
-export default function CompressImage() {
+export default function CompressImagePage() {
     const [imageCount, setImageCount] = useState<number>(20);
     const [workerCount, setWorkerCount] = useState<number>(4);
     const [mainThreadProgress, setMainThreadProgress] = useState<number>(0);
