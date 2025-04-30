@@ -69,24 +69,28 @@ export default function CompressImage() {
         setMainThreadTime(endTime - startTime);
     };
 
-    const compressInWorkerThread = async (arrayBuffers: ArrayBuffer[], workerController: CompressWorkerController) => {
+    const compressInWorkerThread = async (arrayBuffers: ArrayBuffer[]) => {
+        const workerController = new CompressWorkerController(workerCount);
         const startTime = performance.now();
         let finishedCountForWorker = 0;
-        await Promise.all(
-            arrayBuffers.map(async (arrayBuffer) => {
-                await workerController.compress(arrayBuffer);
-                finishedCountForWorker++;
-                setWorkerThreadProgress(
-                    Math.round((finishedCountForWorker / imageCount) * 100)
-                );
-            })
-        );
+        try {
+            await Promise.all(
+                arrayBuffers.map(async (arrayBuffer) => {
+                    await workerController.compress(arrayBuffer);
+                    finishedCountForWorker++;
+                    setWorkerThreadProgress(
+                        Math.round((finishedCountForWorker / imageCount) * 100)
+                    );
+                })
+            );
+        } finally {
+            workerController.destroy();
+        }
         const endTime = performance.now();
         setWorkerThreadTime(endTime - startTime);
     };
 
     const test = async () => {
-        const workerController = new CompressWorkerController(workerCount);
         setMainThreadProgress(0);
         setWorkerThreadProgress(0);
         setMainThreadTime(null);
@@ -102,12 +106,10 @@ export default function CompressImage() {
 
             await Promise.all([
                 compressInMainThread(arrayBuffersForMain),
-                compressInWorkerThread(arrayBuffersForWorker, workerController),
+                compressInWorkerThread(arrayBuffersForWorker),
             ]);
         } catch (error) {
             console.error("Error during compression:", error);
-        } finally {
-            workerController.destroy();
         }
     };
 
