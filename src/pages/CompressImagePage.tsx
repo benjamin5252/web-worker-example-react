@@ -13,6 +13,7 @@ export default function CompressImagePage() {
     const [workerThreadProgress, setWorkerThreadProgress] = useState<number>(0);
     const [mainThreadTime, setMainThreadTime] = useState<number | null>(null);
     const [workerThreadTime, setWorkerThreadTime] = useState<number | null>(null);
+    const [imageDownloadCount, setImageDownloadCount] = useState<number>(0);
 
     const onImageCountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
@@ -48,9 +49,14 @@ export default function CompressImagePage() {
     }
     
     const getImageFiles = async (count: number) => {
+        let downloadCount = 0;
+        setImageDownloadCount(0)
         const files = await Promise.all(new Array(count).fill(0).map(async (_, index) => {
-            const response = await fetch(`https://picsum.photos/id/${index}/4096/2160`);
+            const urlIndex = index % 30;
+            const response = await fetch(`https://picsum.photos/id/${urlIndex}/4096/2160`);
             const blob = await response.blob();
+            downloadCount ++;
+            setImageDownloadCount(downloadCount)
             return new File([blob], `image-${index}.jpg`, { type: "image/jpeg" });
         }));
         return files;
@@ -128,12 +134,14 @@ export default function CompressImagePage() {
                 <Button onClick={test}>Compress</Button>
             </div>
             <div >
-                <h2 className="text-xl font-bold">Progress</h2>
-                <p className="text-gray-500">Main thread progress:</p>
+                <div>Image download: {imageDownloadCount} / {imageCount}</div>
+                <br/>
+                {/* <h2 className="text-xl font-bold">Progress</h2> */}
+                <p className="font-bold">Main thread progress:</p>
                 <p className="text-gray-500">Time taken: {mainThreadTime !== null ? `${mainThreadTime.toFixed(2)} ms` : ""}</p>
                 <Progress className="w-[700px] max-w-[100vw]" value={mainThreadProgress} />
                 <br />
-                <p className="text-gray-500">Worker thread progress:</p>
+                <p className="font-bold">Worker thread progress:</p>
                 <p className="text-gray-500">Time taken: {workerThreadTime !== null ? `${workerThreadTime.toFixed(2)} ms` : ""}</p>
                 <Progress className="w-[700px] max-w-[100vw]" value={workerThreadProgress} />
             </div>
