@@ -86,12 +86,12 @@ export default function PageFreezePage() {
                     <p className="text-black">GIF</p>
                     <img className="w-[80px] h-[80px]" src={sonic} />
                 </div>
-                <div className="flex flex-col items-center justify-center gap-2">
+                {/* <div className="flex flex-col items-center justify-center gap-2">
                     <p className="text-black">Scroll</p>
                     <div className="w-[120px] h-[120px] overflow-y-scroll">
                         <p className="text-black">This is a test to show how web worker can prevent the main thread from freezing. The main thread will be blocked for a while when the calculation is done on the main thread. But when the calculation is done on the web worker, the main thread will not be blocked.</p>
                     </div>
-                </div>
+                </div> */}
             </div>
             <div className="flex flex-col items-center justify-center mt-4 gap-4">
                 <div>
