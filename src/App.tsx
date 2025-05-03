@@ -5,10 +5,10 @@ import PageFreezePage from './pages/PageFreezePage'
 function App() {
   return (
     <>
-      <div className="flex flex-col items-center justify-center min-h-svh w-full overflow-x-auto ">
+      <div id="example1" className="flex flex-col items-center justify-center min-h-svh w-full overflow-x-auto ">
         <PageFreezePage />
       </div>
-      <div className="flex flex-col items-center justify-center min-h-svh w-full overflow-x-auto ">
+      <div id="example2" className="flex flex-col items-center justify-center min-h-svh w-full overflow-x-auto ">
         <CompressImagePage/>
       </div>
     </>
