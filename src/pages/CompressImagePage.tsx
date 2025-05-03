@@ -116,7 +116,7 @@ export default function CompressImagePage() {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen gap-4">
-            <h1 className="text-2xl font-bold">Compress Image</h1>
+            <h1 className="text-2xl font-bold text-center">Compress Image</h1>
             <div >
                 <p className="text-gray-500">Compress images using web workers</p>
                 <p className="text-gray-500">Number of 4k images:</p>
@@ -131,11 +131,11 @@ export default function CompressImagePage() {
                 <h2 className="text-xl font-bold">Progress</h2>
                 <p className="text-gray-500">Main thread progress:</p>
                 <p className="text-gray-500">Time taken: {mainThreadTime !== null ? `${mainThreadTime.toFixed(2)} ms` : ""}</p>
-                <Progress className="w-[700px]" value={mainThreadProgress} />
+                <Progress className="w-[700px] max-w-[100vw]" value={mainThreadProgress} />
                 <br />
                 <p className="text-gray-500">Worker thread progress:</p>
                 <p className="text-gray-500">Time taken: {workerThreadTime !== null ? `${workerThreadTime.toFixed(2)} ms` : ""}</p>
-                <Progress className="w-[700px]" value={workerThreadProgress} />
+                <Progress className="w-[700px] max-w-[100vw]" value={workerThreadProgress} />
             </div>
         </div>
     );

@@ -71,6 +71,8 @@ export default function PageFreezePage() {
                     <div className="bg-black w-[100px] h-[100px] animate-[bgPulse_3s_ease-in-out_infinite]">
                     </div>
                 </div>
+            </div>
+            <div className="flex flex-row items-center justify-center gap-4 h-fit">
                 <div className="flex flex-col items-center justify-center gap-2">
                     <p className="text-black">CSS animation (gpu)</p>
                     <div className="animate-pulse" role="status">
