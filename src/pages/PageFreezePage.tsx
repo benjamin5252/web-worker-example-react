@@ -43,7 +43,7 @@ export default function PageFreezePage() {
         } else {
             sum = await heavyCalcWorker(n);
         }
-        setRecords([...records, `sum from 0 to ${input} is ${sum} (${type})`]);
+        setRecords([...records, `sum from 0 to ${input} = ${sum} (${type})`]);
     }
 
     function onInputChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -84,7 +84,7 @@ export default function PageFreezePage() {
                 </div>
                 <div className="flex flex-col items-center justify-center gap-2">
                     <p className="text-black">GIF</p>
-                    <img className="w-[100px] h-[100px]" src={sonic} />
+                    <img className="w-[80px] h-[80px]" src={sonic} />
                 </div>
                 <div className="flex flex-col items-center justify-center gap-2">
                     <p className="text-black">Scroll</p>
@@ -102,7 +102,7 @@ export default function PageFreezePage() {
                     <Button onClick={() => calc("worker")} >Calc on Worker</Button>
                 </div>
             </div>
-            <div className="mt-4 flex flex-col items-center justify-center">
+            <div className="mt-4 flex flex-col items-center justify-start h-[120px] overflow-y-auto">
                 {
                     records.map((record, index) => {
                         return (
