@@ -64,17 +64,21 @@ export default function PageFreezePage() {
                 <div className="flex flex-col items-center justify-center gap-2">
                     <p className="text-black">JS controled</p>
                     <span>{progress}</span>
-                    <Progress className="w-[100px]" value={progress} />
+                    <Progress className="w-[80px]" value={progress} />
                 </div>
                 <div className="flex flex-col items-center justify-center gap-2">
-                    <p className="text-black">CSS animation (cpu)</p>
-                    <div className="bg-black w-[100px] h-[100px] animate-[bgPulse_3s_ease-in-out_infinite]">
+                    <p className="text-black">CSS button effect</p>
+                    <Button >Test</Button>
+                </div>
+                <div className="flex flex-col items-center justify-center gap-2">
+                    <p className="text-black">CSS animate(cpu)</p>
+                    <div className="bg-black h-[80px] animate-[bgPulse_3s_ease-in-out_infinite]">
                     </div>
                 </div>
             </div>
             <div className="flex flex-row items-center justify-center gap-4 h-fit">
                 <div className="flex flex-col items-center justify-center gap-2">
-                    <p className="text-black">CSS animation (gpu)</p>
+                    <p className="text-black">CSS animate(gpu)</p>
                     <div className="animate-pulse" role="status">
                         <svg aria-hidden="true" className="w-[80px] h-[80px] text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
