@@ -1,6 +1,7 @@
 //example to compress image
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
+import { Button } from "@/components/ui/button";
 import { compressFile } from "@/lib/utils";
 import { CompressWorkerController } from "@/workerController/CompressWorkerController";
 import { useState } from "react";
@@ -124,7 +125,7 @@ export default function CompressImagePage() {
                 <Input value={workerCount} onChange={onWorkerCountChange} />
             </div>
             <div >
-                <button className="text-black" onClick={test}>Compress</button>
+                <Button onClick={test}>Compress</Button>
             </div>
             <div >
                 <h2 className="text-xl font-bold">Progress</h2>
