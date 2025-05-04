@@ -52,8 +52,8 @@ export default function CompressImagePage() {
         let downloadCount = 0;
         setImageDownloadCount(0)
         const files = await Promise.all(new Array(count).fill(0).map(async (_, index) => {
-            const urlIndex = index % 30;
-            const response = await fetch(`https://picsum.photos/id/${urlIndex}/4096/2160`);
+            const urlIndex = index % 10;
+            const response = await fetch(`${import.meta.env.BASE_URL}images/sample_${urlIndex}.jpg`);
             const blob = await response.blob();
             downloadCount ++;
             setImageDownloadCount(downloadCount)
