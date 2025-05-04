@@ -1,13 +1,18 @@
 
 import { compressFile } from '@/lib/utils';
+import { OneTaskQueue } from '../lib/OneTaskQueue';
 
 export interface CompressWorkerMessage {
   id: string;
   data: string | ArrayBuffer;
 }
 
-self.addEventListener('message', async (event) => {
+const queue = new OneTaskQueue();
+
+self.addEventListener('message', (event) => {
   const { id, data } = event.data;
-  const result = await compressFile(data);
-  self.postMessage({ id, result });
+  queue.enqueue(async () => {
+    const result = await compressFile(data);
+    self.postMessage({ id, result });
+  });
 });
