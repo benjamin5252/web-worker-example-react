@@ -15,13 +15,13 @@ export class CompressWorkerController {
         this.workers = workers;
     }
 
-    compress(data: Transferable): Promise<string | ArrayBuffer> {
+    compress(data: any, transfer: Transferable[] = []): Promise<string | ArrayBuffer> {
         return new Promise(resolve => {
             const id = this.id++;
             this.callBackMap[id] = resolve;
             const index = id % this.workers.length;
             const worker = this.workers[index];
-            worker.postMessage({ id, data });
+            worker.postMessage({ id, data }, transfer);
         });
     }
 

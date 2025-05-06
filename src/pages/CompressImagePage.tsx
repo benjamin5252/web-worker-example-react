@@ -83,7 +83,7 @@ export default function CompressImagePage() {
         try {
             await Promise.all(
                 arrayBuffers.map(async (arrayBuffer) => {
-                    await workerController.compress(arrayBuffer);
+                    await workerController.compress(arrayBuffer, [arrayBuffer]);
                     finishedCountForWorker++;
                     setWorkerThreadProgress(
                         Math.round((finishedCountForWorker / imageCount) * 100)
